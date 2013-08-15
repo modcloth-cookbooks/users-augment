@@ -24,14 +24,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Notes / ideas
-# one search for users augment databag
-# appends to authorized_key of given user
-# can specify location of home dir / authorized key file
-# can do groups (but not groups of keys, just groups of users)
-# only one key per user
-# writes a script to do this so it can be repeated
-
 augment_keys = nil
 if data_bag(:users).include?('augment_keys')
   augment_keys = data_bag_item(:users, :augment_keys)
