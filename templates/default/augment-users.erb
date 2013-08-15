@@ -11,10 +11,11 @@ main() {
   echo "${YELLOW}Move along human, nothing to augment here.${RESET}"
 <% else -%>
   <% @info.each_pair do |un, data| -%>
-  grep -q "<%= data[:keys] %>" "<%= data[:authorized_keys_path] %>" || \
+  grep -q '# Successfully augmented by Chef augment-users::default' || \
     echo -e "<%= data[:keys] %>" >> \
     "<%= data[:authorized_keys_path] %>"
 
+  echo '# successfully augmented by Chef augment-users::default' >> "<%= data[:authorized_keys_path] %>"
   <% end -%>
   echo "${GREEN}Users augmented. You're welcome, human.${RESET}"
 <% end -%>
