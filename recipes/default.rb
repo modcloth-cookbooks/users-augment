@@ -23,3 +23,51 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
+
+# Notes / ideas
+# one search for users augment databag
+# appends to authorized_key of given user
+# can specify location of home dir / authorized key file
+# can do groups (but not groups of keys, just groups of users)
+# only one key per user
+# writes a script to do this so it can be repeated
+
+augment_keys = nil
+if data_bag(:users).include?('augment_keys')
+  augment_keys = data_bag_item(:users, :augment_keys)
+end
+augment_data = node['users_augment']
+
+info = nil
+info = if augment_keys && augment_data
+  info = augment_data.each_with_object({}) do |u, hash|
+    name = u[0]
+    data = u[1]
+    allowed_users = data['users']
+
+    keys = allowed_users.map do |allowed_user|
+      augment_keys[allowed_user]
+    end.reject(&:nil?).join("\n")
+
+    hash[name] = {
+      authorized_keys_path: data['authorized_keys_path'] || "/home/#{name}/.ssh/authorized_keys",
+      keys: keys,
+    }
+  end
+end
+
+bash 'do_augment' do
+  code '/root/augment-users'
+  user 'root'
+  group 'root'
+  action :nothing
+end
+
+template '/root/augment-users' do
+  cookbook 'users-augment'
+  source 'augment-users.erb'
+  mode 0500
+  variables info: info
+  notifies :run, 'bash[do_augment]', :delayed
+  action [:create, :touch]
+end
