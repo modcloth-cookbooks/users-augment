@@ -1,0 +1,13 @@
+---
+language: ruby
+rvm:
+- 1.9.3
+install:
+- bundle install
+script:
+- bundle exec foodcritic --epic-fail any .
+notifications:
+  email:
+    recipients:
+      - d.buch+users-augment-cookbook@modcloth.com
+      - r.colton+users-augment-cookbook@modcloth.com
