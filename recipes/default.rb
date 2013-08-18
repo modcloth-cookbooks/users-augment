@@ -64,4 +64,6 @@ template '/root/augment-users' do
   )
   notifies :run, 'bash[do_augment]', :delayed
   action [:create, :touch]
+
+  not_if { info.nil? }
 end

@@ -4,11 +4,7 @@
 main() {
   local GREEN=$(echo -e "\033[32;1m")
   local RESET=$(echo -e "\033[0m")
-  local YELLOW=$(echo -e "\033[33;1m")
 
-<% if @info.nil? -%>
-  echo "${YELLOW}Move along human, nothing to augment here.${RESET}"
-<% else -%>
   <% @info.each_pair do |un, data| -%>
   if [[ -f "<%= data[:authorized_keys_path] %>" ]] ; then
     grep -q "<%= @verification_string %>" || \
@@ -19,7 +15,6 @@ main() {
   fi
   <% end -%>
   echo "${GREEN}Users augmented. You're welcome, human.${RESET}"
-<% end -%>
 }
 
 set -e
