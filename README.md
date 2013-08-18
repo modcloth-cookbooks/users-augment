@@ -55,7 +55,7 @@ name 'example-base'
 description 'This is an example base role.'
 
 run_list(
-  'role[youroperatingsystem]',
+  'recipe[youroperatingsystem]',
   'recipe[users-augment]',
   # ... other stuff
 )  
@@ -63,10 +63,11 @@ run_list(
 
 ### 2. Create Your Keys
 
-To maintain simplicity, `users-augment` searches for a single data bag
+To keep things simple and fast, `users-augment` searches for a single data bag
 in your `users` bag named `augment_keys`.  For each key/value pair in
 this bag, the key is the name of the user or group, and the value is
-either a string or an array of strings containing your ssh public keys.
+either a string or an array of strings with each string being a public
+ssh key.
 
 **NOTE:** While creating groups of users in either your `augment_keys`
 bag or by way of a role is completely possible, it is not recommended.
@@ -87,7 +88,7 @@ A key file would look something like this:
   "id": "augment_keys", // this is the most important part
   "alice": "bobskey123",
   "bob": "joeskey456",
-  "and-a-third-user": "that-third-user_s-key"
+  "carol": "carolskey789"
 }
 ```
 
@@ -111,15 +112,15 @@ For example:
       // if you don't specify the path to authorized_keys,
       // it is assumed to be /home/<username>/.ssh/authorized_keys
       "users": {
-        "and-a-third-user"
+        "carol"
       }
     }
   }
 }
 ```
 
-In this scenario, alice and bob can log in as the `root` user, and
-and-a-third-user can log in as `appuser`
+In this scenario, 'alice' and 'bob' can log in as the `root` user, and
+'carol' can log in as `appuser`
 
 
 *NOTE:* It may be advantageous to use roles for pre-defined
