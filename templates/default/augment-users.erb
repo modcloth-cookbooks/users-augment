@@ -11,11 +11,11 @@ main() {
 <% else -%>
   <% @info.each_pair do |un, data| -%>
   if [[ -f "<%= data[:authorized_keys_path] %>" ]] ; then
-    grep -q '# Successfully augmented by Chef recipe[users-augment::default]' || \
+    grep -q "<%= @verification_string %>" || \
       echo -e "<%= data[:keys] %>" >> \
       "<%= data[:authorized_keys_path] %>"
 
-    echo '# Successfully augmented by Chef recipe[users-augment::default]' >> "<%= data[:authorized_keys_path] %>"
+    echo "<%= @verification_string %>" >> "<%= data[:authorized_keys_path] %>"
   fi
   <% end -%>
   echo "${GREEN}Users augmented. You're welcome, human.${RESET}"

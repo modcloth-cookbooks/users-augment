@@ -58,7 +58,10 @@ template '/root/augment-users' do
   cookbook 'users-augment'
   source 'augment-users.erb'
   mode 0500
-  variables info: info
+  variables(
+    info: info,
+    verification_string: '# Successfully augmented by Chef recipe[users::augment]'
+  )
   notifies :run, 'bash[do_augment]', :delayed
   action [:create, :touch]
 end
