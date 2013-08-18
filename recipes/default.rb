@@ -25,13 +25,13 @@
 #
 
 augment_keys = if data_bag(:users).include?('augment_keys')
-  augment_keys = data_bag_item(:users, :augment_keys)
+  data_bag_item(:users, :augment_keys)
 end
 
 augment_data = node['users_augment']
 
 info = if augment_keys && augment_data
-  info = augment_data.each_with_object({}) do |u, hash|
+  augment_data.each_with_object({}) do |u, hash|
     name = u[0]
     data = u[1]
     allowed_users = data['users']
