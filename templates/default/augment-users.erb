@@ -5,7 +5,7 @@ main() {
   local GREEN=$(echo -e "\033[32;1m")
   local RESET=$(echo -e "\033[0m")
 
-  <% @info.each_pair do |un, data| -%>
+  <% @info.each do |data| -%>
   if [[ -f "<%= data[:authorized_keys_path] %>" ]] ; then
     grep -q "<%= @verification_string %>" || \
       echo -e "<%= data[:keys] %>" >> \

@@ -31,7 +31,7 @@ end
 augment_data = node['users_augment']
 
 info = if augment_keys && augment_data
-  augment_data.each_with_object({}) do |u, hash|
+  augment_data.each_with_object([]) do |u, arr|
     name = u[0]
     data = u[1]
     allowed_users = data['users']
@@ -40,7 +40,7 @@ info = if augment_keys && augment_data
       augment_keys[allowed_user]
     end.reject(&:nil?).join("\n")
 
-    hash[name] = {
+    arr << {
       authorized_keys_path: data['authorized_keys_path'] || "/home/#{name}/.ssh/authorized_keys",
       keys: keys,
     }
